@@ -5,10 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English-Hebrew Flashcards</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .card { width: 80%; max-width: 400px; margin: 50px auto; padding: 20px; border: 2px solid #000; border-radius: 10px; cursor: pointer; }
-        .hidden { display: none; }
-        .button { padding: 10px 20px; margin: 10px; border: none; background-color: #007BFF; color: white; cursor: pointer; border-radius: 5px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f4f4f4; 
+            padding: 20px;
+        }
+        .card {
+            width: 80%; 
+            max-width: 400px; 
+            margin: 50px auto; 
+            padding: 40px; 
+            border-radius: 15px;
+            background: #ffffff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.5s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .button {
+            padding: 12px 20px;
+            margin: 15px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -55,6 +87,7 @@
             { english: "take a tour", hebrew: "לצאת לסיור" }
         ];
         
+        const colors = ["#FFADAD", "#FFD6A5", "#FDFFB6", "#CAFFBF", "#9BF6FF", "#A0C4FF", "#BDB2FF", "#FFC6FF"];
         let currentIndex = 0;
         let showingEnglish = true;
 
@@ -65,14 +98,18 @@
 
         function nextCard() {
             currentIndex = (currentIndex + 1) % flashcards.length;
-            showingEnglish = true;
-            document.getElementById("word").innerText = flashcards[currentIndex].english;
+            updateCard();
         }
 
         function prevCard() {
             currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+            updateCard();
+        }
+
+        function updateCard() {
             showingEnglish = true;
             document.getElementById("word").innerText = flashcards[currentIndex].english;
+            document.getElementById("flashcard").style.backgroundColor = colors[currentIndex % colors.length];
         }
     </script>
 </body>
