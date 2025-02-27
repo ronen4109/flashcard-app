@@ -22,7 +22,11 @@
             font-size: 24px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s, background 0.5s ease;
+            transition: transform 0.3s, background 0.5s ease, opacity 0.5s;
+            opacity: 0;
+        }
+        .fade-in {
+            opacity: 1;
         }
         .card:hover {
             transform: scale(1.05);
@@ -36,20 +40,22 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: 16px;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.2s;
         }
         .button:hover {
             background-color: #0056b3;
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
     <h2>English-Hebrew Flashcards</h2>
-    <div id="flashcard" class="card" onclick="flipCard()">
+    <div id="flashcard" class="card fade-in" onclick="flipCard()">
         <p id="word">advantage</p>
     </div>
     <button class="button" onclick="prevCard()">Previous</button>
     <button class="button" onclick="nextCard()">Next</button>
+    <button class="button" onclick="speakWord()">🔊 Speak</button>
 
     <script>
         const flashcards = [
@@ -108,8 +114,20 @@
 
         function updateCard() {
             showingEnglish = true;
-            document.getElementById("word").innerText = flashcards[currentIndex].english;
-            document.getElementById("flashcard").style.backgroundColor = colors[currentIndex % colors.length];
+            const card = document.getElementById("flashcard");
+            card.style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById("word").innerText = flashcards[currentIndex].english;
+                card.style.backgroundColor = colors[currentIndex % colors.length];
+                card.style.opacity = 1;
+            }, 300);
+        }
+
+        function speakWord() {
+            const word = flashcards[currentIndex].english;
+            const speech = new SpeechSynthesisUtterance(word);
+            speech.lang = "en-US";
+            window.speechSynthesis.speak(speech);
         }
     </script>
 </body>
