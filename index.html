@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English-Hebrew Flashcards</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .card { width: 80%; max-width: 400px; margin: 50px auto; padding: 20px; border: 2px solid #000; border-radius: 10px; cursor: pointer; }
+        .hidden { display: none; }
+        .button { padding: 10px 20px; margin: 10px; border: none; background-color: #007BFF; color: white; cursor: pointer; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>English-Hebrew Flashcards</h2>
+    <div id="flashcard" class="card" onclick="flipCard()">
+        <p id="word">Click to start</p>
+    </div>
+    <button class="button" onclick="prevCard()">Previous</button>
+    <button class="button" onclick="nextCard()">Next</button>
+
+    <script>
+        const flashcards = [
+            { english: "advantage", hebrew: "יתרון" },
+            { english: "church", hebrew: "כנסייה" },
+            { english: "country", hebrew: "מדינה" },
+            { english: "credit card", hebrew: "כרטיס אשראי" },
+            { english: "flight", hebrew: "טיסה" },
+            { english: "flower", hebrew: "פרח" },
+            { english: "guy", hebrew: "בחור" },
+            { english: "line", hebrew: "קו / שורה" },
+            { english: "mail", hebrew: "דואר" },
+            { english: "mosque", hebrew: "מסגד" },
+            { english: "passenger", hebrew: "נוסע" },
+            { english: "pilot", hebrew: "טייס" },
+            { english: "plane", hebrew: "מטוס" },
+            { english: "synagogue", hebrew: "בית כנסת" },
+            { english: "vacation", hebrew: "חופשה" },
+            { english: "insist", hebrew: "להתעקש" },
+            { english: "offer", hebrew: "להציע" },
+            { english: "remain", hebrew: "להישאר" },
+            { english: "take off", hebrew: "להמריא" },
+            { english: "think", hebrew: "לחשוב" },
+            { english: "central", hebrew: "מרכזי" },
+            { english: "christian", hebrew: "נוצרי" },
+            { english: "cool", hebrew: "מגניב" },
+            { english: "jewish", hebrew: "יהודי" },
+            { english: "muslim", hebrew: "מוסלמי" },
+            { english: "useful", hebrew: "שימושי" },
+            { english: "at the moment", hebrew: "כרגע" },
+            { english: "even", hebrew: "אפילו" },
+            { english: "have a good time", hebrew: "לבלות" },
+            { english: "near", hebrew: "קרוב" },
+            { english: "normally", hebrew: "בדרך כלל" },
+            { english: "take a tour", hebrew: "לצאת לסיור" }
+        ];
+        
+        let currentIndex = 0;
+        let showingEnglish = true;
+
+        function flipCard() {
+            showingEnglish = !showingEnglish;
+            document.getElementById("word").innerText = showingEnglish ? flashcards[currentIndex].english : flashcards[currentIndex].hebrew;
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % flashcards.length;
+            showingEnglish = true;
+            document.getElementById("word").innerText = flashcards[currentIndex].english;
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+            showingEnglish = true;
+            document.getElementById("word").innerText = flashcards[currentIndex].english;
+        }
+    </script>
+</body>
+</html>
