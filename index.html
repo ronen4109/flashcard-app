@@ -66,6 +66,31 @@
             padding: 8px;
             font-size: 16px;
         }
+        #hardWordsList {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #hardWordsList ul {
+            list-style: none;
+            padding: 0;
+        }
+        #hardWordsList li {
+            margin: 5px 0;
+        }
+        .remove-button {
+            margin-left: 10px;
+            color: red;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +104,7 @@
             <option value="Verb">Verbs</option>
             <option value="Adjective">Adjectives</option>
             <option value="Other">Other</option>
+            <option value="hard">Hard Words ⭐</option>
         </select>
     </div>
 
@@ -93,6 +119,12 @@
     <button class="button" onclick="nextCard()">Next</button>
     <button class="button" onclick="speakWord()">🔊 Speak</button>
     <button class="button" onclick="shuffleCards()">🔀 Shuffle</button>
+    <button class="button" onclick="markHardWord()">⭐ קשה לי</button>
+
+    <div id="hardWordsList">
+        <h3>⭐ מילים שקשה לי איתן</h3>
+        <ul id="hardList"></ul>
+    </div>
 
     <script>
         const allFlashcards = [
@@ -129,8 +161,13 @@
         let flashcards = [...allFlashcards];
         let currentIndex = 0;
         let showingEnglish = true;
+        let hardWords = JSON.parse(localStorage.getItem("hardWords")) || [];
 
         function updateCard() {
+            if (flashcards.length === 0) {
+                document.getElementById("word").innerText = "No words to show.";
+                return;
+            }
             showingEnglish = true;
             const card = document.getElementById("flashcard");
             card.style.opacity = 0;
@@ -143,21 +180,25 @@
         }
 
         function flipCard() {
+            if (flashcards.length === 0) return;
             showingEnglish = !showingEnglish;
             document.getElementById("word").innerText = showingEnglish ? flashcards[currentIndex].english : flashcards[currentIndex].hebrew;
         }
 
         function nextCard() {
+            if (flashcards.length === 0) return;
             currentIndex = (currentIndex + 1) % flashcards.length;
             updateCard();
         }
 
         function prevCard() {
+            if (flashcards.length === 0) return;
             currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
             updateCard();
         }
 
         function speakWord() {
+            if (flashcards.length === 0) return;
             const word = flashcards[currentIndex].english;
             const speech = new SpeechSynthesisUtterance(word);
             speech.lang = "en-US";
@@ -179,17 +220,55 @@
         }
 
         function updateProgress() {
-            const progress = ((currentIndex + 1) / flashcards.length) * 100;
+            const progress = flashcards.length === 0 ? 0 : ((currentIndex + 1) / flashcards.length) * 100;
             document.getElementById("progressBar").style.width = progress + "%";
         }
 
         function applyFilter() {
             const category = document.getElementById("categoryFilter").value;
-            flashcards = category === "all" ? [...allFlashcards] : allFlashcards.filter(card => card.category === category);
+            if (category === "all") {
+                flashcards = [...allFlashcards];
+            } else if (category === "hard") {
+                flashcards = allFlashcards.filter(card => hardWords.some(w => w === card.english));
+            } else {
+                flashcards = allFlashcards.filter(card => card.category === category);
+            }
             currentIndex = 0;
             updateCard();
         }
 
+        function markHardWord() {
+            const current = flashcards[currentIndex];
+            if (!hardWords.includes(current.english)) {
+                hardWords.push(current.english);
+                localStorage.setItem("hardWords", JSON.stringify(hardWords));
+                renderHardWords();
+            }
+        }
+
+        function removeHardWord(word) {
+            hardWords = hardWords.filter(w => w !== word);
+            localStorage.setItem("hardWords", JSON.stringify(hardWords));
+            renderHardWords();
+            applyFilter();
+        }
+
+        function renderHardWords() {
+            const list = document.getElementById("hardList");
+            list.innerHTML = "";
+            hardWords.forEach(word => {
+                const li = document.createElement("li");
+                li.textContent = word;
+                const removeBtn = document.createElement("button");
+                removeBtn.textContent = "❌";
+                removeBtn.className = "remove-button";
+                removeBtn.onclick = () => removeHardWord(word);
+                li.appendChild(removeBtn);
+                list.appendChild(li);
+            });
+        }
+
+        renderHardWords();
         updateCard();
     </script>
 </body>
