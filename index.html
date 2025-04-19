@@ -51,7 +51,7 @@
 <body>
     <h2>English-Hebrew Flashcards</h2>
     <div id="flashcard" class="card fade-in" onclick="flipCard()">
-        <p id="word">advantage</p>
+        <p id="word">action</p>
     </div>
     <button class="button" onclick="prevCard()">Previous</button>
     <button class="button" onclick="nextCard()">Next</button>
@@ -59,40 +59,36 @@
 
     <script>
         const flashcards = [
-            { english: "advantage", hebrew: "יתרון" },
-            { english: "church", hebrew: "כנסייה" },
-            { english: "country", hebrew: "מדינה" },
-            { english: "credit card", hebrew: "כרטיס אשראי" },
-            { english: "flight", hebrew: "טיסה" },
-            { english: "flower", hebrew: "פרח" },
-            { english: "guy", hebrew: "בחור" },
-            { english: "line", hebrew: "קו / שורה" },
-            { english: "mail", hebrew: "דואר" },
-            { english: "mosque", hebrew: "מסגד" },
-            { english: "passenger", hebrew: "נוסע" },
-            { english: "pilot", hebrew: "טייס" },
-            { english: "plane", hebrew: "מטוס" },
-            { english: "synagogue", hebrew: "בית כנסת" },
-            { english: "vacation", hebrew: "חופשה" },
-            { english: "insist", hebrew: "להתעקש" },
-            { english: "offer", hebrew: "להציע" },
-            { english: "remain", hebrew: "להישאר" },
-            { english: "take off", hebrew: "להמריא" },
-            { english: "think", hebrew: "לחשוב" },
-            { english: "central", hebrew: "מרכזי" },
-            { english: "christian", hebrew: "נוצרי" },
-            { english: "cool", hebrew: "מגניב" },
-            { english: "jewish", hebrew: "יהודי" },
-            { english: "muslim", hebrew: "מוסלמי" },
-            { english: "useful", hebrew: "שימושי" },
-            { english: "at the moment", hebrew: "כרגע" },
-            { english: "even", hebrew: "אפילו" },
-            { english: "have a good time", hebrew: "לבלות" },
-            { english: "near", hebrew: "קרוב" },
-            { english: "normally", hebrew: "בדרך כלל" },
-            { english: "take a tour", hebrew: "לצאת לסיור" }
+            { english: "action", hebrew: "פעולה" },
+            { english: "adventure", hebrew: "הרפתקה" },
+            { english: "arrival", hebrew: "הגעה" },
+            { english: "conversation", hebrew: "שיחה" },
+            { english: "difficulty", hebrew: "קושי" },
+            { english: "Earth", hebrew: "כדור הארץ" },
+            { english: "effect", hebrew: "השפעה" },
+            { english: "energy", hebrew: "אנרגיה" },
+            { english: "experience", hebrew: "ניסיון / חוויה" },
+            { english: "hero", hebrew: "גיבור" },
+            { english: "opinion", hebrew: "דעה" },
+            { english: "purpose", hebrew: "מטרה" },
+            { english: "sort", hebrew: "סוג" },
+            { english: "space", hebrew: "חלל" },
+            { english: "beat", hebrew: "להכות / לנצח" },
+            { english: "fight", hebrew: "להילחם" },
+            { english: "land", hebrew: "לנחות" },
+            { english: "manage", hebrew: "לנהל / להסתדר" },
+            { english: "save", hebrew: "להציל / לשמור" },
+            { english: "impossible", hebrew: "בלתי אפשרי" },
+            { english: "ordinary", hebrew: "רגיל" },
+            { english: "real", hebrew: "אמיתי" },
+            { english: "simple", hebrew: "פשוט" },
+            { english: "wonderful", hebrew: "נהדר" },
+            { english: "although", hebrew: "למרות" },
+            { english: "especially", hebrew: "במיוחד" },
+            { english: "in fact", hebrew: "למעשה" },
+            { english: "throughout", hebrew: "לאורך / בכל" }
         ];
-        
+
         const colors = ["#FFADAD", "#FFD6A5", "#FDFFB6", "#CAFFBF", "#9BF6FF", "#A0C4FF", "#BDB2FF", "#FFC6FF"];
         let currentIndex = 0;
         let showingEnglish = true;
