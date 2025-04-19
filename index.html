@@ -14,7 +14,7 @@
         .card {
             width: 80%; 
             max-width: 400px; 
-            margin: 50px auto; 
+            margin: 30px auto; 
             padding: 40px; 
             border-radius: 15px;
             background: #ffffff;
@@ -33,7 +33,7 @@
         }
         .button {
             padding: 12px 20px;
-            margin: 15px;
+            margin: 10px;
             border: none;
             background-color: #007BFF;
             color: white;
@@ -46,52 +46,101 @@
             background-color: #0056b3;
             transform: scale(1.1);
         }
+        .progress {
+            width: 80%;
+            max-width: 400px;
+            height: 10px;
+            margin: 10px auto;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #007BFF;
+            transition: width 0.3s;
+        }
+        select {
+            margin-top: 10px;
+            padding: 8px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <h2>English-Hebrew Flashcards</h2>
+
+    <div>
+        <label for="categoryFilter">Choose category:</label>
+        <select id="categoryFilter" onchange="applyFilter()">
+            <option value="all">All</option>
+            <option value="Noun">Nouns</option>
+            <option value="Verb">Verbs</option>
+            <option value="Adjective">Adjectives</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+
+    <div class="progress">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+
     <div id="flashcard" class="card fade-in" onclick="flipCard()">
         <p id="word">action</p>
     </div>
     <button class="button" onclick="prevCard()">Previous</button>
     <button class="button" onclick="nextCard()">Next</button>
     <button class="button" onclick="speakWord()">🔊 Speak</button>
+    <button class="button" onclick="shuffleCards()">🔀 Shuffle</button>
 
     <script>
-        const flashcards = [
-            { english: "action", hebrew: "פעולה" },
-            { english: "adventure", hebrew: "הרפתקה" },
-            { english: "arrival", hebrew: "הגעה" },
-            { english: "conversation", hebrew: "שיחה" },
-            { english: "difficulty", hebrew: "קושי" },
-            { english: "Earth", hebrew: "כדור הארץ" },
-            { english: "effect", hebrew: "השפעה" },
-            { english: "energy", hebrew: "אנרגיה" },
-            { english: "experience", hebrew: "ניסיון / חוויה" },
-            { english: "hero", hebrew: "גיבור" },
-            { english: "opinion", hebrew: "דעה" },
-            { english: "purpose", hebrew: "מטרה" },
-            { english: "sort", hebrew: "סוג" },
-            { english: "space", hebrew: "חלל" },
-            { english: "beat", hebrew: "להכות / לנצח" },
-            { english: "fight", hebrew: "להילחם" },
-            { english: "land", hebrew: "לנחות" },
-            { english: "manage", hebrew: "לנהל / להסתדר" },
-            { english: "save", hebrew: "להציל / לשמור" },
-            { english: "impossible", hebrew: "בלתי אפשרי" },
-            { english: "ordinary", hebrew: "רגיל" },
-            { english: "real", hebrew: "אמיתי" },
-            { english: "simple", hebrew: "פשוט" },
-            { english: "wonderful", hebrew: "נהדר" },
-            { english: "although", hebrew: "למרות" },
-            { english: "especially", hebrew: "במיוחד" },
-            { english: "in fact", hebrew: "למעשה" },
-            { english: "throughout", hebrew: "לאורך / בכל" }
+        const allFlashcards = [
+            { english: "action", hebrew: "פעולה", category: "Noun" },
+            { english: "adventure", hebrew: "הרפתקה", category: "Noun" },
+            { english: "arrival", hebrew: "הגעה", category: "Noun" },
+            { english: "conversation", hebrew: "שיחה", category: "Noun" },
+            { english: "difficulty", hebrew: "קושי", category: "Noun" },
+            { english: "Earth", hebrew: "כדור הארץ", category: "Noun" },
+            { english: "effect", hebrew: "השפעה", category: "Noun" },
+            { english: "energy", hebrew: "אנרגיה", category: "Noun" },
+            { english: "experience", hebrew: "ניסיון / חוויה", category: "Noun" },
+            { english: "hero", hebrew: "גיבור", category: "Noun" },
+            { english: "opinion", hebrew: "דעה", category: "Noun" },
+            { english: "purpose", hebrew: "מטרה", category: "Noun" },
+            { english: "sort", hebrew: "סוג", category: "Noun" },
+            { english: "space", hebrew: "חלל", category: "Noun" },
+            { english: "beat", hebrew: "להכות / לנצח", category: "Verb" },
+            { english: "fight", hebrew: "להילחם", category: "Verb" },
+            { english: "land", hebrew: "לנחות", category: "Verb" },
+            { english: "manage", hebrew: "לנהל / להסתדר", category: "Verb" },
+            { english: "save", hebrew: "להציל / לשמור", category: "Verb" },
+            { english: "impossible", hebrew: "בלתי אפשרי", category: "Adjective" },
+            { english: "ordinary", hebrew: "רגיל", category: "Adjective" },
+            { english: "real", hebrew: "אמיתי", category: "Adjective" },
+            { english: "simple", hebrew: "פשוט", category: "Adjective" },
+            { english: "wonderful", hebrew: "נהדר", category: "Adjective" },
+            { english: "although", hebrew: "למרות", category: "Other" },
+            { english: "especially", hebrew: "במיוחד", category: "Other" },
+            { english: "in fact", hebrew: "למעשה", category: "Other" },
+            { english: "throughout", hebrew: "לאורך / בכל", category: "Other" }
         ];
 
-        const colors = ["#FFADAD", "#FFD6A5", "#FDFFB6", "#CAFFBF", "#9BF6FF", "#A0C4FF", "#BDB2FF", "#FFC6FF"];
+        let flashcards = [...allFlashcards];
         let currentIndex = 0;
         let showingEnglish = true;
+
+        function updateCard() {
+            showingEnglish = true;
+            const card = document.getElementById("flashcard");
+            card.style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById("word").innerText = flashcards[currentIndex].english;
+                card.style.backgroundColor = getColor(currentIndex);
+                card.style.opacity = 1;
+                updateProgress();
+            }, 300);
+        }
 
         function flipCard() {
             showingEnglish = !showingEnglish;
@@ -108,23 +157,40 @@
             updateCard();
         }
 
-        function updateCard() {
-            showingEnglish = true;
-            const card = document.getElementById("flashcard");
-            card.style.opacity = 0;
-            setTimeout(() => {
-                document.getElementById("word").innerText = flashcards[currentIndex].english;
-                card.style.backgroundColor = colors[currentIndex % colors.length];
-                card.style.opacity = 1;
-            }, 300);
-        }
-
         function speakWord() {
             const word = flashcards[currentIndex].english;
             const speech = new SpeechSynthesisUtterance(word);
             speech.lang = "en-US";
             window.speechSynthesis.speak(speech);
         }
+
+        function getColor(index) {
+            const colors = ["#FFADAD", "#FFD6A5", "#FDFFB6", "#CAFFBF", "#9BF6FF", "#A0C4FF", "#BDB2FF", "#FFC6FF"];
+            return colors[index % colors.length];
+        }
+
+        function shuffleCards() {
+            for (let i = flashcards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+            }
+            currentIndex = 0;
+            updateCard();
+        }
+
+        function updateProgress() {
+            const progress = ((currentIndex + 1) / flashcards.length) * 100;
+            document.getElementById("progressBar").style.width = progress + "%";
+        }
+
+        function applyFilter() {
+            const category = document.getElementById("categoryFilter").value;
+            flashcards = category === "all" ? [...allFlashcards] : allFlashcards.filter(card => card.category === category);
+            currentIndex = 0;
+            updateCard();
+        }
+
+        updateCard();
     </script>
 </body>
 </html>
